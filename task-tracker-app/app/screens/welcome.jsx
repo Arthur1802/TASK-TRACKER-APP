@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, useColorScheme, View } from 'react-native'
 import { ThemedText as Text } from '../../components/ThemedText'
 import { ThemedView as Div } from '../../components/ThemedView'
 import { ThemedButton as Button } from '../../components/ThemedButton'
@@ -7,11 +7,13 @@ import { useNavigation } from '@react-navigation/native'
 export default function WelcomeScreen() {
     const navigation = useNavigation()
 
+    const theme = useColorScheme() ?? 'light'
+
     return (
         <Div>
             <View style = { styles.welcomeContainer }>
                 <Image
-                    source = { require('../../assets/images/logo.png') }
+                    source = { theme === "dark" ? require('../../assets/images/dark/logo.png') : require('../../assets/images/light/logo.png') }
                     style = { styles.welcomeLogo }
                 />
 

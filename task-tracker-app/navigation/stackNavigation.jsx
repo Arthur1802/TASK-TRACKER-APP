@@ -1,19 +1,21 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { DrawerActions, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useColorScheme } from 'react-native'
 
 const Stack = createStackNavigator()
 
 import Welcome from '../app/screens/welcome'
 import Login from '../app/screens/login'
 import Signin from '../app/screens/signin'
-import Home from '../app/screens/index'
 import EditTask from '../app/screens/editTask'
 import DrawerNavigator from './drawerNavigation'
 
 export default function StackNavigation() {
     const navigation = useNavigation()
+
+    const theme = useColorScheme() ?? 'light'
 
     return (
         <Stack.Navigator
