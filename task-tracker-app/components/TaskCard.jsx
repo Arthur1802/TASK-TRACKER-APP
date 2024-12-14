@@ -1,6 +1,7 @@
-import { StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native'
 import { ThemedText as Text } from './ThemedText'
 import { SymbolView } from 'expo-symbols'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 export function TaskCard({ task, onPressHeaderRight, onPressHeaderLeft }) {
     const theme = useColorScheme() ?? 'light'
@@ -8,19 +9,32 @@ export function TaskCard({ task, onPressHeaderRight, onPressHeaderLeft }) {
     return (
         <>
             {
-                !task ? (
+                task ? (
                     <View style = {[ styles.taskCard, { backgroundColor: theme === "dark" ? "#232323" : "#ffffff" } ]}>
                         <View style = { styles.taskCardHeader }>
                             <TouchableOpacity
                                 onPress = { onPressHeaderLeft }
                             >
-                                <SymbolView name = "square" size = {28} tintColor = {theme === "dark" ? "#fff" : "#000"} />
+                                {
+                                    Platform.OS === 'ios' ? (
+                                        <SymbolView name = "square" size = {28} tintColor = {theme === "dark" ? "#fff" : "#000"} />
+                                    ) : (
+                                        <Ionicons name = "square-outline" size = {28} color = {theme === "dark" ? "#fff" : "#000"} />
+                                    )
+
+                                }
                             </TouchableOpacity>
                             <Text type = "title" fontWeight = "semibold">Title</Text>
                             <TouchableOpacity
                                 onPress = { onPressHeaderRight }
                             >
-                                <SymbolView name = "square.and.pencil" size = { 28 } tintColor = {theme === "dark" ? "#fff" : "#000"} />
+                                {
+                                    Platform.OS === 'ios' ? (
+                                        <SymbolView name = "square.and.pencil" size = { 28 } tintColor = {theme === "dark" ? "#fff" : "#000"} />
+                                    ) : (
+                                        <Ionicons name = "create-outline" size = { 28 } color = {theme === "dark" ? "#fff" : "#000"} />
+                                    )
+                                }
                             </TouchableOpacity>
                         </View>
                         <View style = { styles.taskCardContent }>
@@ -49,12 +63,24 @@ export function TaskCard({ task, onPressHeaderRight, onPressHeaderLeft }) {
                 ) : (
                     <View style = { styles.taskCardOutline }>
                         <View style = { styles.taskCardHeaderOutline }>
-                            <SymbolView name = "square" size = {28} tintColor = "#ccc" />
+                            {
+                                Platform.OS === 'ios' ? (
+                                    <SymbolView name = "square" size = {28} tintColor = "#ccc" />
+                                ) : (
+                                    <Ionicons name = "square-outline" size = {28} color = "#ccc" />
+                                )
+                            }
                             <Text type = "title" fontWeight = "semibold">No tasks</Text>
                             <TouchableOpacity
                                 onPress = { onPressHeaderRight }
                             >
-                                <SymbolView name = "plus.circle" size = {28} tintColor = "#000" />
+                                {
+                                    Platform.OS === 'ios' ? (
+                                        <SymbolView name = "plus.circle" size = {28} tintColor = "#000" />
+                                    ) : (
+                                        <Ionicons name = "add-circle-outline" size = {28} color = "#000" />
+                                    )
+                                }
                             </TouchableOpacity>
                         </View>
                     </View>

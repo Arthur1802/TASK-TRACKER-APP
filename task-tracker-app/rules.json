@@ -1,0 +1,28 @@
+{
+    "rules": {
+        ".read": "root.child('users').child(auth.uid).child('role').val() === 'ADMIN'",
+        ".write": "root.child('users').child(auth.uid).child('role').val() === 'ADMIN'",
+        "users": {
+            "$uid": {
+                ".validate": "newData.hasChildren(['uid', 'name', 'email', 'role'])",
+                ".read": "$uid === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'ADMIN'",
+                ".write": "$uid == auth.uid || root.child('users').child(auth.uid).child('role').val() === 'ADMIN'",
+                "role": {
+                    ".validate": "newData.val() == 'ADMIN' || newData.val() == 'USER'"
+                },
+                "tasks": {
+                    "$id": {
+                        ".validate": "root.child('users').child(auth.uid).child('role').val() === 'ADMIN' && newData.hasChildren(['id'])"
+                    }
+                }
+            }
+        },
+        "tasks": {
+            "$id": {
+                ".validate": "newData.hasChildren(['id', 'createdBy', 'title', 'createdDate', 'startingDate', 'dueDate', 'description', status'])",
+                ".read": "root.child('tasks').child($id).child('createdBy').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'ADMIN'",
+                ".write": "root.child('tasks').child($id).child('createdBy').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'ADMIN'"
+            }
+        }
+    }
+}

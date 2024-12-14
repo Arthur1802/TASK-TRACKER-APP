@@ -23,7 +23,7 @@ export default function StackNavigation() {
                 headerTitleStyle: { fontFamily: 'poppins-semibold', fontSize: 20 },
                 headerBackTitleVisible: false,
             }}
-            initialRouteName = "welcome"
+            initialRouteName = "drawerNavigator"
         >
             <Stack.Screen
                 name = "welcome"
@@ -68,7 +68,7 @@ export default function StackNavigation() {
                 component = { EditTask }
                 options = {{
                     headerTransparent: true,
-                    title: '',
+                    title: 'Edit Task',
                     presentation: 'modal',
                     headerBackTitle: '',
                     headerBackImage: () => (

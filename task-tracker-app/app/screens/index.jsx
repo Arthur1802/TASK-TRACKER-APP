@@ -1,94 +1,52 @@
-import { StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { ThemedText as Text } from '../../components/ThemedText'
 import { ThemedView as Div } from '../../components/ThemedView'
 import { TaskCard } from '../../components/TaskCard'
-import { SymbolView, SymbolViewProps, SFSymbol } from 'expo-symbols'
-import Ionicons from '@expo/vector-icons/Ionicons'
-import { useEffect, useState } from 'react'
-import Task from '../../model/Task/Task'
+import { MenuButton } from '../../components/MenuButton'
+import TaskDAO from '../../model/Task/TaskDAO'
+import { useEffect, useMemo, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function HomeScreen() {
-    const theme = useColorScheme() ?? 'light'
+    const taskDAO = useMemo(() => new TaskDAO(), [])
+
+    const [tasks, setTasks] = useState([])
 
     const navigation = useNavigation()
 
     const [menuViewWidth, setMenuViewWidth] = useState(0)
 
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const uid = await AsyncStorage.getItem('uid')
+
+            try {
+                const tasks = await taskDAO.getTasksByUser(uid)
+                console.log(tasks)
+                setTasks(tasks)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        fetchTasks()
+    }, [taskDAO, tasks])
+
     const handleLayout = (event) => {
         const { width } = event.nativeEvent.layout
         setMenuViewWidth(width)
     }
+
+    const today = new Date().toISOString().split('T')[0]
+    const tasksDueToday = tasks.filter(task => task?.dueDate === today).length
     
     return (
         <Div>
             <View style = { styles.indexContainer }>
-                <View>
-
-                </View>
-
-                <View style = {[ styles.menuContainer, { gap: menuViewWidth * 0.1 } ]} onLayout = {handleLayout}>
-                    <TouchableOpacity style = {{ width: '45%' }}>
-                        <View style = { styles.menuButton }>
-                            <View
-                                style = {{
-                                    height: 50,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-start',
-                                    gap: 5,
-                                }}
-                            >
-                                <SymbolView name = "calendar.circle.fill" size = {35} tintColor = "#0a63ff" />
-                                <Text type = "default" fontWeight = "semibold">Today</Text>
-                            </View>
-                            <View
-                                style = {{
-                                    height: 50,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-start',
-                                    gap: 10,
-                                }}
-                            >
-                                <Ionicons name = "chevron-forward" size = {14} color = "#999" />
-                                <Text type = "title" fontWeight = "semibold">5</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style = {{ width: '45%' }}>
-                        <View style = { styles.menuButton }>
-                            <View
-                                style = {{
-                                    height: 50,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-start',
-                                    gap: 5,
-                                }}
-                            >
-                                <SymbolView name = "calendar" size = {28} tintColor = "#0a63ff" />
-                                <Text type = "default" fontWeight = "semibold">Scheduled</Text>
-                            </View>
-                            <View
-                                style = {{
-                                    height: 50,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    alignItems: 'flex-start',
-                                    gap: 10,
-                                }}
-                            >
-                                <Ionicons name = "chevron-forward" size = {14} color = "#999" />
-                                <Text type = "title" fontWeight = "semibold">4</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                <View style = {[ styles.menuContainer, { gap: menuViewWidth * 0.1,  } ]} onLayout = {handleLayout}>
+                    { Array.from({ length: tasksDueToday }).map((_, index) => (
+                        <MenuButton key = {index} />
+                    )) }
                 </View>
 
                 <View style = { styles.taskCardsContainer }>
@@ -98,7 +56,19 @@ export default function HomeScreen() {
                         }}
                         onPress = {() => navigation.navigate('editTask')}
                     >
-                        <TaskCard />
+                        {
+                            tasks.length > 0 ? (
+                                tasks.map((task, index) => (
+                                    <TaskCard
+                                        task = {task}
+                                    />
+                                ))
+                            ) : (
+                                <TaskCard
+                                    task = {null}
+                                />
+                            )
+                        }
                     </TouchableOpacity>
                 </View>
             </View>

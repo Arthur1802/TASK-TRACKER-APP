@@ -2,17 +2,21 @@ import ModelError from '../ModelError'
 
 export default class Task {
     #id
+    #createdBy
     #createdDate
+    #title
     #startingDate
-    #finishingDate
+    #dueDate
     #description
     #status
 
-    constructor(id, createdDate, startingDate, finishingDate, description, status) {
+    constructor(id, createdBy, createdDate, title, startingDate, dueDate, description, status) {
         this.setId(id)
+        this.setCreatedBy(createdBy)
         this.setCreatedDate(createdDate)
+        this.setTitle(title)
         this.setStartingDate(startingDate)
-        this.setFinishingDate(finishingDate)
+        this.setFinishingDate(dueDate)
         this.setDescription(description)
         this.setStatus(status)
     }
@@ -28,6 +32,17 @@ export default class Task {
         this.#id = id
     }
 
+    getCreatedBy() {
+        return this.#createdBy
+    }
+
+    setCreatedBy(createdBy) {
+        if (!this.validateCreatedBy(createdBy)) {
+            throw new ModelError('Invalid created by')
+        }
+        this.#createdBy = createdBy
+    }
+
     getCreatedDate() {
         return this.#createdDate
     }
@@ -37,6 +52,17 @@ export default class Task {
             throw new ModelError('Invalid created date')
         }
         this.#createdDate = createdDate
+    }
+
+    getTitle() {
+        return this.#title
+    }
+
+    setTitle(title) {
+        if (!this.validateDescription(title)) {
+            throw new ModelError('Invalid title')
+        }
+        this.#title = title
     }
 
     getStartingDate() {
@@ -51,14 +77,14 @@ export default class Task {
     }
 
     getFinishingDate() {
-        return this.#finishingDate
+        return this.#dueDate
     }
 
-    setFinishingDate(finishingDate) {
-        if (!this.validateDate(finishingDate)) {
-            throw new ModelError('Invalid finishing date')
+    setFinishingDate(dueDate) {
+        if (!this.validateDate(dueDate)) {
+            throw new ModelError('Invalid due date')
         }
-        this.#finishingDate = finishingDate
+        this.#dueDate = dueDate
     }
 
     getDescription() {
@@ -87,9 +113,17 @@ export default class Task {
         return !!id // Verifica se o id é válido (não é nulo ou vazio)
     }
 
+    validateCreatedBy(createdBy) {
+        return !!createdBy // Verifica se o criador não é nulo ou vazio
+    }
+
     validateDate(date) {
         const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/
         return regex.test(date)
+    }
+
+    validateTitle(title) {
+        return !!title // Verifica se o título não é nulo ou vazio
     }
 
     validateDescription(description) {
@@ -102,6 +136,7 @@ export default class Task {
 
     show() {
         let output = 'Task: ' + this.getId() + '\n'
+        output += 'Created By: ' + this.getCreatedBy() + '\n'
         output += 'Created Date: ' + this.getCreatedDate() + '\n'
         output += 'Starting Date: ' + this.getStartingDate() + '\n'
         output += 'Finishing Date: ' + this.getFinishingDate() + '\n'

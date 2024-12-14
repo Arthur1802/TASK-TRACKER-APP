@@ -1,7 +1,9 @@
 export default class TaskDTO {
     constructor(tsk) {
         this.id = tsk.getId()
+        this.createdBy = tsk.getCreatedBy()
         this.createdDate = tsk.getCreatedDate()
+        this.title = tsk.getTitle()
         this.startingDate = tsk.getStartingDate()
         this.finishDate = tsk.getFinishDate()
         this.description = tsk.getDescription()
@@ -12,8 +14,16 @@ export default class TaskDTO {
         return this.id
     }
 
+    getCreatedBy() {
+        return this.createdBy
+    }
+
     getCreatedDate() {
         return this.createdDate
+    }
+
+    getTitle() {
+        return this.title
     }
 
     getStartingDate() {

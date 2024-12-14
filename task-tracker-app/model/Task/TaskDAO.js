@@ -1,10 +1,8 @@
 'use strict'
 
-import { getDatabase, ref, query, orderByChild, equalTo, get, set, remove } from 'firebase/database'
-
-import TaskDTO from './TaskDTO.js'
-import ModelError from '../ModelError.js'
-import Task from './Task.js'
+import { getDatabase, ref, query, orderByChild, equalTo, get, set, remove } from "firebase/database"
+import TaskDTO from "./TaskDTO.js"
+import ModelError from "../ModelError.js"
 
 export default class TaskDAO {
     static connectionPromise = null
@@ -14,75 +12,110 @@ export default class TaskDAO {
     }
 
     async getConnection() {
-        if (Task.connectionPromise === null) {
-            Task.connectionPromise = new Promise(function (resolve, reject) {
+        if (TaskDAO.connectionPromise === null) {
+            TaskDAO.connectionPromise = new Promise(function (resolve, reject) {
                 const db = getDatabase()
-
                 if (db) {
                     resolve(db)
                 } else {
-                    reject(new ModelError('Could not stablish a connection to the database'))
+                    reject(new ModelError('Could not establish a connection to the database'))
                 }
             })
         }
 
-        return Task.connectionPromise
+        return TaskDAO.connectionPromise
     }
 
     async getAllTasks() {
         let connectionDB = await this.getConnection()
 
-        return new Promise ((resolve) => {
+        return new Promise((resolve, reject) => {
             let arrayTasks = []
             let dbRefTasks = ref(connectionDB, 'tasks')
             let paramSearch = orderByChild('id')
             let search = query(dbRefTasks, paramSearch)
-            let result = get(search)
 
-            result.then(dataSnapshot => {
-                dataSnapshot.forEach(dataSnapshotObj => {
-                    let elem = dataSnapshotObj.val()
-                    arrayTasks.push(new Task(elem.id, elem.createdDate, elem.startingDate, elem.finishDate, elem.description, elem.status))
-                })
+            get(search).then(
+                (dataSnapshot) => {
+                    dataSnapshot.forEach((dataSnapshotObj) => {
+                        let elem = dataSnapshotObj.val()
+                        arrayTasks.push(
+                            new Task(
+                                elem.id,
+                                elem.createdDate,
+                                elem.createdBy,
+                                elem.title,
+                                elem.startingDate,
+                                elem.dueDate,
+                                elem.description,
+                                elem.status
+                            )
+                        )
+                    })
 
-                resolve(arrayTasks)
-            }, (e) => console.log('#' + e))
+                    resolve(arrayTasks)
+                },
+                (error) => reject(error)
+            )
+        })
+    }
+
+    async getTasksByUser(uid) {
+        let connectionDB = await this.getConnection()
+
+        return new Promise((resolve, reject) => {
+            let arrayTasks = []
+            let dbRefTasks = ref(connectionDB, 'tasks')
+            let paramSearch = orderByChild('id')
+            let paramEqual = equalTo(uid)
+            let search = query(dbRefTasks, paramSearch, paramEqual)
+            let searchResult = get(search)
+
+            searchResult.then(dataSnapshot => {
+                let data = dataSnapshot.val()
+
+                if (data !== null) {
+                    resolve(new Task(data.id, data.createdBy, data.createdDate, data.title, data.startingDate, data.dueDate, data.description, data.status))
+                } else {
+                    reject(null)
+                }
+            })
         })
     }
 
     async add(task) {
         let connectionDB = await this.getConnection()
 
-        let result = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             let dbRefTasks = ref(connectionDB, 'tasks/' + task.getId())
-            let setPromise = set(dbRefTasks, new TaskDTO(taks))
-            setPromise.then(() => { resolve(true) }, error => { reject(error) })
+            set(dbRefTasks, new TaskDTO(task)).then(
+                () => resolve(true),
+                (error) => reject(error)
+            )
         })
-
-        return result
     }
 
     async edit(task) {
         let connectionDB = await this.getConnection()
 
-        let result = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             let dbRefTasks = ref(connectionDB, 'tasks/' + task.getId())
-            let setPromise = set(dbRefTasks, new TaskDTO(taks))
-            setPromise.then(() => { resolve(true) }, error => { reject(error) })
+            set(dbRefTasks, new TaskDTO(task)).then(
+                () => resolve(true),
+                (error) => reject(error)
+            )
         })
-
-        return result
     }
 
     async delete(task) {
-        let connectionDB = this.getConnection()
+        let connectionDB = await this.getConnection()
 
-        let result = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             let dbRefTasks = ref(connectionDB, 'tasks/' + task.getId())
-            let setPromise = remove(dbRefTasks, new TaskDTO(taks))
-            setPromise.then(() => { resolve(true) }, error => { reject(error) })
+            remove(dbRefTasks).then(
+                () => resolve(true),
+                (error) => reject(error)
+            )
         })
-
-        return result
     }
 }
