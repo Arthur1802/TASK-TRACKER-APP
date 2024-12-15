@@ -43,11 +43,15 @@ export default function HomeScreen() {
     return (
         <Div>
             <View style = { styles.indexContainer }>
-                <View style = {[ styles.menuContainer, { gap: menuViewWidth * 0.1,  } ]} onLayout = {handleLayout}>
-                    { Array.from({ length: tasksDueToday }).map((_, index) => (
-                        <MenuButton key = {index} />
-                    )) }
-                </View>
+                {
+                    tasks.length > 0 ? (
+                    <View style = {[ styles.menuContainer, { gap: menuViewWidth * 0.1 } ]} onLayout = {handleLayout}>
+                        { Array.from({ length: tasksDueToday }).map((_, index) => (
+                            <MenuButton key = {index} />
+                        )) }
+                    </View>
+                    ) : null
+                }
 
                 <View style = { styles.taskCardsContainer }>
                     <TouchableOpacity

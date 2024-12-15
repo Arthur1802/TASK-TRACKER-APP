@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { ThemedText as Text } from './ThemedText'
 
-export function ThemedButton({ type = 'primary', onPress, style, text, ...otherProps }) {
+export function ThemedButton({ type = 'primary', onPress, style, text, loading, ...otherProps }) {
 
     return (
         <TouchableOpacity
@@ -9,15 +9,21 @@ export function ThemedButton({ type = 'primary', onPress, style, text, ...otherP
             onPress = { onPress }
         >
             { otherProps.children }
-            <Text
-                type = { 'button' }
-                fontWeight = { 'semibold' }
-                style = {{
-                    color: "#fff",
-                }}
-            >
-                { text }
-            </Text>
+            {
+                loading ? (
+                    <ActivityIndicator color = '#fff' />
+                ) : (
+                    <Text
+                        type = { 'button' }
+                        fontWeight = { 'semibold' }
+                        style = {{
+                            color: "#fff",
+                        }}
+                    >
+                        { text }
+                    </Text>
+                )
+            }
         </TouchableOpacity>
     )
 }

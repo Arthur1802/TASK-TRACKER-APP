@@ -20,15 +20,18 @@ const DrawerLayout = ({ icon, label, navigateTo }) => {
     return (
         <TouchableOpacity>
             <DrawerItem
-                icon = {({ color, size }) => <SymbolView name = {icon} tintColor = {theme === "dark" ? "#fff" : "#000"} size = {size} />}
+                icon = {({ size }) => <SymbolView name = {icon} tintColor = {theme === "dark" ? "#fff" : "#000"} size = {size} />}
                 label = {label}
                 onPress = {() => navigation.navigate(navigateTo)}
+                labelStyle = {{ color: theme === "dark" ? "#fff" : "#000" }}
             />
         </TouchableOpacity>
     )
 }
 
 const DrawerItems = props => {
+    const theme = useColorScheme() ?? 'light'
+
     return DrawerList.map((el, i) => {
         return (
             <DrawerLayout
@@ -36,6 +39,7 @@ const DrawerItems = props => {
                 icon = {el.icon}
                 label = {el.label}
                 navigateTo = {el.navigateTo}
+                labelStyle = {{ color: theme === "dark" ? "#fff" : "#000" }}
             />
         )
     })
@@ -44,8 +48,6 @@ export function DrawerContent(props) {
     const navigation = useNavigation()
 
     const theme = useColorScheme() ?? 'light'
-
-    const [loading , setLoading] = React.useState(false)
 
     return (
         <View style = {{ flex: 1 }}>
@@ -62,8 +64,11 @@ export function DrawerContent(props) {
                                     style = {{ marginTop: 5 }}
                                 />
                                 <View style = {{ marginLeft: 10, flexDirection: 'column' }}>
-                                    <Title style = {styles.title}>Adarsh</Title>
-                                    <Text style = {styles.caption} numberOfLines = {1}>
+                                    <Title
+                                        style = {[styles.title, { color: theme === "dark" ? "#fff" : "#000" }]}
+                                        labelStyle = {{ color: theme === "dark" ? "#fff" : "#000" }}
+                                    >Adarsh</Title>
+                                    <Text lightColor = "#000" darkColor = "#fff" style = {styles.caption} numberOfLines = {1}>
                                         adarshthakur210@gmail.com
                                     </Text>
                                 </View>
@@ -78,11 +83,12 @@ export function DrawerContent(props) {
             <View style = {styles.bottomDrawerSection}>
                 <TouchableOpacity>
                     <DrawerItem
-                        icon = {({ color, size }) => (
+                        icon = {({ size }) => (
                             <SymbolView name = "arrow.turn.down.left" tintColor = {theme === "dark" ? "#fff" : "#000"} size = {size} />
                         )}
                         label = "Sign Out"
                         onPress = {() => setTimeout(() => {navigation.reset({ index: 0, routes: [{ name: 'welcome', params: { from: 'home' } }] }) }, 2000) }
+                        labelStyle = {{ color: theme === "dark" ? "#fff" : "#000" }}
                     />
                 </TouchableOpacity>
             </View>

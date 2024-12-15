@@ -22,5 +22,5 @@
         "components/HapticTab.jsx",
         "components/ThemedText.jsx",
         "components/ThemedView.jsx"
-    ]
+, "contexts/UserProvider.jsx"    ]
 }

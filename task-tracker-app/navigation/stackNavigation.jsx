@@ -23,7 +23,7 @@ export default function StackNavigation() {
                 headerTitleStyle: { fontFamily: 'poppins-semibold', fontSize: 20 },
                 headerBackTitleVisible: false,
             }}
-            initialRouteName = "drawerNavigator"
+            initialRouteName = "welcome"
         >
             <Stack.Screen
                 name = "welcome"

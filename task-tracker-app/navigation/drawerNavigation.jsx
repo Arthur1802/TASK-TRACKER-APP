@@ -10,7 +10,8 @@ import { useColorScheme } from 'react-native'
 const Drawer = createDrawerNavigator()
 
 export default function DrawerNavigation() {
-    const theme = useColorScheme ?? 'light'
+    const theme = useColorScheme() ?? 'light'
+    
     return (
         <Drawer.Navigator
             initialRouteName = "home"
@@ -18,8 +19,11 @@ export default function DrawerNavigation() {
             screenOptions = {{
                 headerShown: true,
                 headerTitleStyle: { fontFamily: 'poppins-semibold', fontSize: 20 },
-                headerTintColor: '#000',
+                headerTintColor: theme === "dark" ? "#fff" : "#000",
                 headerStyle: {
+                    backgroundColor: theme === "dark" ? "#000" : "#fff",
+                },
+                drawerStyle: {
                     backgroundColor: theme === "dark" ? "#000" : "#fff",
                     color: theme === "dark" ? "#fff" : "#000",
                 }

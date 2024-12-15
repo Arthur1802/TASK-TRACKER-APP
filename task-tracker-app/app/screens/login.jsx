@@ -3,14 +3,19 @@ import { ThemedView as Div } from '../../components/ThemedView'
 import { ThemedText as Text } from '../../components/ThemedText'
 import { ThemedButton as Button } from '../../components/ThemedButton'
 import { InputContainer } from '../../components/InputContainer'
+import { logUser } from '../../contexts/UserProvider'
 import { useNavigation } from '@react-navigation/native'
 import { SymbolView } from 'expo-symbols'
 import { useState } from 'react'
+import { Login } from '../../utils/firebase/auth'
+import Toast from 'react-native-toast-message'
 
 export default function SignInScreen() {
     const theme = useColorScheme() ?? 'light'
 
-    const [loading, setLoading] = useState(false)
+    const [loading1, setLoading1] = useState(false)
+    
+    const [loading2, setLoading2] = useState(false)
 
     const navigation = useNavigation()
 
@@ -23,12 +28,31 @@ export default function SignInScreen() {
         setValues((prev) => ({ ...prev, [field]: value }))
     }
 
-    const handleLogin = () => {
-        console.log(values)
+    const handleLogin = async () => {
+        if (!loading1) {
+            setLoading1(true)
+        }
+        
+        setTimeout( async () => {
+            try {
+                const result = await Login(values)
+    
+                if (result) {
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Logged in successfully'
+                    })
+                }
+            } catch (error) {
+                console.error(error)
+            }    
+        }, 1500)
+
+        setLoading1(false)
     }
 
     const renderScreen = (route) => {
-        setLoading(true)
+        setLoading2(true)
         setTimeout(() => {
             navigation.navigate(route, {
                 drawer: 'home'
@@ -39,7 +63,7 @@ export default function SignInScreen() {
     return (
         <Div>
             { 
-                loading ? (
+                loading2 ? (
                     <View
                         style = {{
                             width: '100%',
@@ -72,7 +96,8 @@ export default function SignInScreen() {
                         <Button
                             text = 'Log In'
                             onPress = { handleLogin }
-                            />
+                            loading = { loading1 }
+                        />
 
                         <Text
                             type = 'link'

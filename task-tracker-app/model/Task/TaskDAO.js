@@ -1,7 +1,9 @@
 'use strict'
 
-import { getDatabase, ref, query, orderByChild, equalTo, get, set, remove } from "firebase/database"
+import { ref, query, orderByChild, equalTo, get, set, remove } from "firebase/database"
+import { db as firebaseDB } from '../../utils/firebase/config.js'
 import TaskDTO from "./TaskDTO.js"
+import Task from "./Task.js"
 import ModelError from "../ModelError.js"
 
 export default class TaskDAO {
@@ -14,7 +16,7 @@ export default class TaskDAO {
     async getConnection() {
         if (TaskDAO.connectionPromise === null) {
             TaskDAO.connectionPromise = new Promise(function (resolve, reject) {
-                const db = getDatabase()
+                const db = firebaseDB
                 if (db) {
                     resolve(db)
                 } else {
