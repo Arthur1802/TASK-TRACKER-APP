@@ -4,38 +4,60 @@
     "slug": "task-tracker-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/light/icon.png",
     "scheme": "task-tracker-app",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.arthurquinellato.tasktrackerapp",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/light/adaptive-icon.png",
         "backgroundColor": "#transparent"
-      }
+      },
+      "package": "com.arthurquinellato.tasktrackerapp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/light/favicon.png"
     },
     "plugins": [
       "expo-router",
       [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/light/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#transparent"
         }
-      ]
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "82743e81-7f9d-424a-bb47-8aadc7c06c10"
+      }
     }
   }
 }

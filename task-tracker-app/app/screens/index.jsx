@@ -7,8 +7,10 @@ import TaskDAO from '../../model/Task/TaskDAO'
 import { useEffect, useMemo, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function HomeScreen() {
+export default function HomeScreen({ route }) {
     const taskDAO = useMemo(() => new TaskDAO(), [])
+
+    const [user, setUser] = useState(null)
 
     const [tasks, setTasks] = useState([])
 
@@ -17,20 +19,25 @@ export default function HomeScreen() {
     const [menuViewWidth, setMenuViewWidth] = useState(0)
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            const uid = await AsyncStorage.getItem('uid')
+        setUser(route.params?.user)
+    }, [])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const uid = route.params?.user.uid
+    
             try {
-                const tasks = await taskDAO.getTasksByUser(uid)
-                console.log(tasks)
-                setTasks(tasks)
+                const taskList = await taskDAO.getTasksByUser(uid)
+                console.log(taskList)
+                setTasks(taskList)
             } catch (error) {
-                console.error(error)
+                console.error('Error fetching tasks:', error)
             }
         }
-
-        fetchTasks()
-    }, [taskDAO, tasks])
+    
+        fetchData()
+    }, [taskDAO, userDAO])
+    
 
     const handleLayout = (event) => {
         const { width } = event.nativeEvent.layout
@@ -43,6 +50,8 @@ export default function HomeScreen() {
     return (
         <Div>
             <View style = { styles.indexContainer }>
+                <Text>Welcome {user.displayName}</Text>
+
                 {
                     tasks.length > 0 ? (
                     <View style = {[ styles.menuContainer, { gap: menuViewWidth * 0.1 } ]} onLayout = {handleLayout}>
@@ -54,26 +63,27 @@ export default function HomeScreen() {
                 }
 
                 <View style = { styles.taskCardsContainer }>
-                    <TouchableOpacity
-                        style = {{
-                            width: '100%',
-                        }}
-                        onPress = {() => navigation.navigate('editTask')}
-                    >
                         {
                             tasks.length > 0 ? (
                                 tasks.map((task, index) => (
-                                    <TaskCard
-                                        task = {task}
-                                    />
+                                    <TouchableOpacity
+                                        style = {{
+                                            width: '100%',
+                                        }}
+                                        onPress = {() => navigation.navigate('editTask')}
+                                    >
+                                        <TaskCard
+                                            task = {task}
+                                        />
+                                    </TouchableOpacity>
                                 ))
                             ) : (
                                 <TaskCard
                                     task = {null}
+                                    onPressHeaderRight = {() => navigation.navigate('addTask')}
                                 />
                             )
                         }
-                    </TouchableOpacity>
                 </View>
             </View>
         </Div>

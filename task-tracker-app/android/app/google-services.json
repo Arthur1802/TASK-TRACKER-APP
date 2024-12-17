@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "811480553328",
+    "firebase_url": "https://task-tracker-e88b3-default-rtdb.firebaseio.com",
+    "project_id": "task-tracker-e88b3",
+    "storage_bucket": "task-tracker-e88b3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811480553328:android:ed4f3e332e018b2df361b5",
+        "android_client_info": {
+          "package_name": "com.arthurquinellato.tasktrackerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811480553328-n12432234asmbk3gs8tmrbunhd2jo76n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arthurquinellato.tasktrackerapp",
+            "certificate_hash": "4dbed1c7f9722a8f59acb615142f75980ed94787"
+          }
+        },
+        {
+          "client_id": "811480553328-oiqfkm35f79v39bindllr5b75h9l1oor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-yGBcT8J88gWSndtbDzUM9KHqXkY1k0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811480553328-oiqfkm35f79v39bindllr5b75h9l1oor.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "811480553328-3uhe2to3r3grhepm1q8um8mvrh30r8d2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.arthurquinellato.tasktrackerapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

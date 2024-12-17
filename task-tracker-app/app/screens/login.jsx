@@ -45,10 +45,10 @@ export default function SignInScreen() {
                 }
             } catch (error) {
                 console.error(error)
-            }    
+            } finally {
+                setLoading1(false)
+            }
         }, 1500)
-
-        setLoading1(false)
     }
 
     const renderScreen = (route) => {
@@ -57,6 +57,7 @@ export default function SignInScreen() {
             navigation.navigate(route, {
                 drawer: 'home'
             })
+            setLoading2(false)
         }, 2000)
     }
 
@@ -108,7 +109,7 @@ export default function SignInScreen() {
 
                         <Button
                             text = 'Backdoor entrance... '
-                            onPress = { () => renderScreen('drawerNavigator') }
+                            onPress = { () => renderScreen('main') }
                         >
                             <SymbolView name = "arrow.turn.down.right" size = {28} tintColor = "#fff" />
                         </Button>

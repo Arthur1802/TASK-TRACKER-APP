@@ -76,9 +76,9 @@ export function TaskCard({ task, onPressHeaderRight, onPressHeaderLeft }) {
                             >
                                 {
                                     Platform.OS === 'ios' ? (
-                                        <SymbolView name = "plus.circle" size = {28} tintColor = "#000" />
+                                        <SymbolView name = "plus.circle" size = {28} tintColor = {theme === "dark" ? "#fff" : "#000"} />
                                     ) : (
-                                        <Ionicons name = "add-circle-outline" size = {28} color = "#000" />
+                                        <Ionicons name = "add-circle-outline" size = {28} color = {theme === "dark" ? "#fff" : "#000"} />
                                     )
                                 }
                             </TouchableOpacity>

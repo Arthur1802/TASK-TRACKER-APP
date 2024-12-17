@@ -68,7 +68,7 @@ export default class TaskDAO {
         return new Promise((resolve, reject) => {
             let arrayTasks = []
             let dbRefTasks = ref(connectionDB, 'tasks')
-            let paramSearch = orderByChild('id')
+            let paramSearch = orderByChild('uid')
             let paramEqual = equalTo(uid)
             let search = query(dbRefTasks, paramSearch, paramEqual)
             let searchResult = get(search)
